@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>See Attendance</title>
+  <script src="https://cdn.tailwindcss.com"></script> <!-- Tailwind CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.css" rel="stylesheet" /> <!-- Flowbite JS -->
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+  <div class="max-w-md w-full bg-white rounded-lg shadow-md p-6">
+    <h1 class="text-xl font-bold mb-4">View Attendance</h1>
+    <form action="/see-attendance" method="get" class="space-y-4">
+      <label for="date" class="block text-sm font-medium text-gray-700">Select Date:</label>
+      <input type="date" id="date" name="date" required
+        class="w-full border border-gray-300 rounded-lg p-2 focus:ring focus:ring-blue-300">
+      <button type="submit"
+        class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 focus:ring focus:ring-blue-300">
+        View Attendance
+      </button>
+    </form>
+
+    <% if (attendance) { %>
+      <h2 class="text-lg font-semibold mt-6">Attendance for <%= attendance.date.toDateString() %></h2>
+      <ul class="mt-4 space-y-2">
+        <% attendance.students.forEach(student => { %>
+          <li class="flex justify-between bg-gray-50 p-2 rounded-md shadow-sm">
+            <span><%= student.name %></span>
+            <span class="<%= student.status === 'Present' ? 'text-green-500' : 'text-red-500' %>">
+              <%= student.status %>
+            </span>
+          </li>
+        <% }) %>
+      </ul>
+    <% } else if (typeof attendance !== 'undefined') { %>
+      <p class="text-gray-600 mt-4">No attendance data found for the selected date.</p>
+    <% } %>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
+</body>
+</html>

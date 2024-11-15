@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attendance System</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.0.24/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/flowbite@1.4.4/dist/flowbite.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+  <div class="container mx-auto p-8">
+    <!-- Header -->
+    <h1 class="text-4xl font-bold mb-8">Student Attendance</h1>
+
+    <!-- Buttons to toggle form visibility -->
+    <div class="flex space-x-4">
+      <button id="markAttendanceBtn" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Mark Attendance</button>
+      <a href="/see-attendance" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700">See Attendance</a>
+    </div>
+
+    <!-- Attendance Form -->
+    <div id="attendanceForm" class="mt-8 hidden w-full">
+      <h1 class="text-3xl font-bold mb-6">Marking Attendance</h1>
+      <form action="/submit-attendance" method="POST">
+        <table class="min-w-full bg-white border rounded">
+          <thead>
+            <tr>
+              <th class="px-6 py-3 text-left text-gray-600">Name</th>
+              <th class="px-6 py-3 text-left text-gray-600">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% students.forEach((student, index) => { %>
+              <tr>
+                <td class="px-6 py-4"><%= student.name %></td>
+                <td class="px-6 py-4">
+                  <input type="hidden" name="students[<%= index %>][name]" value="<%= student.name %>">
+                  <button type="button" class="toggle-btn bg-green-500 text-white px-4 py-2 rounded">Present</button>
+                  <input type="hidden" name="students[<%= index %>][status]" value="Present">
+                </td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+        <button type="submit" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded">Submit Attendance</button>
+      </form>
+      
+    </div>
+  </div>
+
+  <!-- Script to toggle visibility of the attendance form -->
+  <script>
+    document.getElementById('markAttendanceBtn').addEventListener('click', function() {
+      var form = document.getElementById('attendanceForm');
+      form.classList.toggle('hidden'); // Toggles visibility of the form
+    });
+    document.querySelectorAll('.toggle-btn').forEach(button => {
+      button.addEventListener('click', () => {
+        if (button.classList.contains('bg-green-500')) {
+          button.classList.remove('bg-green-500');
+          button.classList.add('bg-red-500');
+          button.textContent = 'Absent';
+          button.nextElementSibling.value = 'Absent';
+        } else {
+          button.classList.remove('bg-red-500');
+          button.classList.add('bg-green-500');
+          button.textContent = 'Present';
+          button.nextElementSibling.value = 'Present';
+        }
+      });
+    });
+  </script>
+</body>
+</html>
